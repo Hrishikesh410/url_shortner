@@ -1,41 +1,37 @@
 import express from "express";
-import db from "../db/index.js";
-import { userTable } from "../models/user.model.js";
 import { signupPostRequestBodySchema } from "../validation/request.validation.js";
 import { getHashedPasswordWithSalt } from "../utils/hash.js";
+import { createUser, getUserByEmail } from "../services/user.service.js";
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
-  const validationResult =
-    await signupPostRequestBodySchema.safeParseAsync(req.body);
+  const validationResult = await signupPostRequestBodySchema.safeParseAsync(
+    req.body,
+  );
 
-    if(validationResult.error){
-      return res.status(400).json({
-        error: validationResult.error.format()
-      })
-    }
+  if (validationResult.error) {
+    return res.status(400).json({
+      error: validationResult.error.format(),
+    });
+  }
 
-    const {firstname, lastname,email, password} = validationResult.data
+  const { firstname, lastname, email, password } = validationResult.data;
 
- 
-
-  if (exitingUser)
+  const existingUser = await getUserByEmail(email);
+  if (existingUser)
     return res
       .status(400)
-      .json({ error: `User with emai ${email} already exists` });
+      .json({ error: `User with email ${email} already exists` });
 
-  const {salt, hashedPassword} = getHashedPasswordWithSalt(password)
+  const { salt, hashedPassword } = getHashedPasswordWithSalt(password);
 
-  const user = await db
-    .insert(userTable)
-    .values({
-      email,
-      firstname,
-      lastname,
-      password: hashedPassword,
-      salt: salt
-    })
-    .returning({ id: userTable.id });
+  const user = await createUser(
+    email,
+    firstname,
+    lastname,
+    hashedPassword,
+    salt,
+  );
 
   return res.status(201).json({ data: { userId: user } });
 });

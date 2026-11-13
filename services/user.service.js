@@ -8,7 +8,7 @@ import { userTable } from "../models/user.model.js";
 export const getUserByEmail = async (email)=>{
 
 
- const [exitingUser] = await db
+ const [existingUser] = await db
     .select({
       id: userTable.id,
       firstname: userTable.firstname,
@@ -18,7 +18,23 @@ export const getUserByEmail = async (email)=>{
     .from(userTable)
     .where(eq(userTable.email, email));
 
+    return existingUser;
 
-    return exitingUser;
+}
 
+
+export const createUser = async (email, firstname, lastname, hashedPassword, salt)=>{
+      const user = await db
+    .insert(userTable)
+    .values({
+      email,
+      firstname,
+      lastname,
+      password: hashedPassword,
+      salt: salt,
+    })
+    .returning({ id: userTable.id });
+
+
+    return user
 }
