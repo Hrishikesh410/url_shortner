@@ -1,0 +1,75 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "6d5d3590-6f84-416c-97ec-20d80c2c5fa3",
+  "prevIds": [
+    "f9da8d7f-c8fa-4d08-b264-990d6c9c5e69"
+  ],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "urls",
+        "description"
+      ],
+      "writes": [
+        "s|col|public.urls.description",
+        "n|col|public.urls.description",
+        "e|col|public.urls.description"
+      ],
+      "reads": [
+        "n|tbl|public.urls",
+        "n|sch|public"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "urls",
+        "name": "description",
+        "type": "varchar(255)",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "fks\u0000[\"public\",\"urls\",\"urls_user_id_users_id_fkey\"]",
+      "set": {
+        "nameExplicit": false
+      }
+    },
+    {
+      "op": "alter",
+      "key": "pks\u0000[\"public\",\"urls\",\"urls_pkey\"]",
+      "set": {
+        "nameExplicit": false
+      }
+    },
+    {
+      "op": "alter",
+      "key": "pks\u0000[\"public\",\"users\",\"users_pkey\"]",
+      "set": {
+        "nameExplicit": false
+      }
+    },
+    {
+      "op": "alter",
+      "key": "uniques\u0000[\"public\",\"urls\",\"urls_code_key\"]",
+      "set": {
+        "nameExplicit": false
+      }
+    }
+  ]
+}
